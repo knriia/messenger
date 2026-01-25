@@ -1,12 +1,14 @@
+from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-
-DATABASE_URL = 'postgresql+asyncpg://knriia:3292ef51ec@192.168.0.105:5432/messanger_db'
-
-engine = create_async_engine(DATABASE_URL)
-async_session = async_sessionmaker(engine, expire_on_commit=False)
-
+naming_convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referenced_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
 
 class Base(DeclarativeBase):
+    metadata = MetaData(naming_convention=naming_convention)
     pass

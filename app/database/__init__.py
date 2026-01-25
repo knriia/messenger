@@ -1,4 +1,4 @@
-from .base import Base, engine, async_session
+from .base import Base
 from .models import User, Message
 
 __all = [
