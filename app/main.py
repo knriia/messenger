@@ -10,19 +10,21 @@ from app.di.container import DatabaseProvider
 from app.schemas.message import MessageCreate
 from app.services.chat import ChatService
 from app.services.connection_manager import ConnectionManager
+from app.core.config import Settings
 
+
+settings = Settings()
 
 app = FastAPI()
-PATH_TO_STATIC = "/home/ivan/project/messenger/app/static"
+PATH_TO_STATIC = settings.PATH_TO_STATIC
 app.mount("/static", StaticFiles(directory=PATH_TO_STATIC), name="static")
-DB_URL = "postgresql+asyncpg://knriia:3292ef51ec@192.168.0.105:5432/messanger_db"
 container = make_container(DatabaseProvider())
 setup_dishka(app=app, container=container)
 
 
 @app.get('/')
-async def get_front_page():
-    index_path = os.path.join(PATH_TO_STATIC, "index.html")
+async def get_front_page(settings: Settings = Depends(DatabaseProvider.get_settings)):
+    index_path = os.path.join(settings.PATH_TO_STATIC, "index.html")
     return FileResponse(index_path)
 
 
