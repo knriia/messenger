@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import ForeignKey, String, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,7 +20,9 @@ class Message(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(Text, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.utcnow())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+    )
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     author: Mapped["User"] = relationship(back_populates='messages')
