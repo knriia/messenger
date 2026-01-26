@@ -1,4 +1,8 @@
 from dishka import Provider, Scope, provide
+
+from app.core.security import SecurityService
+from app.database.repositories.user import UserRepository
+from app.services.auth import AuthService
 from app.services.chat import ChatService
 from app.services.connection_manager import ConnectionManager
 from typing import AsyncGenerator
@@ -17,7 +21,7 @@ class DatabaseProvider(Provider):
         return create_async_engine(settings.db_url)
 
     @provide(scope=Scope.APP)
-    def get_session_factory(self, engine: AsyncEngine) -> async_sessionmaker:
+    def get_session_factory(self, engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
         return async_sessionmaker(engine, expire_on_commit=False)
 
     # Scope.REQUEST означает, что новая сессия создается для каждого HTTP-запроса/WS-соединения.
@@ -36,3 +40,15 @@ class DatabaseProvider(Provider):
     @provide(scope=Scope.APP)
     def get_connection_manager(self) -> ConnectionManager:
         return ConnectionManager()
+
+    @provide(scope=Scope.APP)
+    def get_security_service(self, settings: Settings) -> SecurityService:
+        return SecurityService(settings=settings)
+
+    @provide(scope=Scope.SESSION)
+    def get_user_repository(self, session: AsyncSession) -> UserRepository:
+        return UserRepository(session=session)
+
+    @provide(scope=Scope.SESSION)
+    def get_auth_service(self, repository: UserRepository, security_service: SecurityService) -> AuthService:
+        return AuthService(repository=repository, security_service=security_service)

@@ -2,15 +2,14 @@ from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models import User
-from app.schemas.user import UserCreate
 
 
 class UserRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def create_user(self, user_data: UserCreate) -> User:
-        stmt = insert(User).values(**user_data.model_dump()).returning(User)
+    async def create_user(self, **kwargs) -> User:
+        stmt = insert(User).values(**kwargs).returning(User)
         result = await self._session.execute(stmt)
         await self._session.commit()
         return result.scalar_one()
