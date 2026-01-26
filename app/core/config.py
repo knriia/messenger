@@ -6,6 +6,9 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     PATH_TO_STATIC: str
     DATABASE_HOST: str = 'db'
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     @property
     def db_url(self) -> str:
