@@ -1,10 +1,9 @@
 from dishka import Provider, Scope, provide
-from app.database.session import AsyncSession, AsyncEngine
 from app.services.chat import ChatService
 from app.services.connection_manager import ConnectionManager
 from typing import AsyncGenerator
 from app.core.config import Settings
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
 
 
 class DatabaseProvider(Provider):
@@ -22,7 +21,7 @@ class DatabaseProvider(Provider):
         return async_sessionmaker(engine, expire_on_commit=False)
 
     # Scope.REQUEST означает, что новая сессия создается для каждого HTTP-запроса/WS-соединения.
-    @provide(scope=Scope.REQUEST)
+    @provide(scope=Scope.SESSION)
     async def get_session(
             self,
             session_factory: async_sessionmaker[AsyncSession]
@@ -30,7 +29,7 @@ class DatabaseProvider(Provider):
         async with session_factory() as session:
             yield session
 
-    @provide(scope=Scope.REQUEST)
+    @provide(scope=Scope.SESSION)
     def get_chat_service(self, session: AsyncSession) -> ChatService:
         return ChatService(session=session)
 

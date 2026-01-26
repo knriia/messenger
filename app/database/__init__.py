@@ -1,10 +1,5 @@
-from .base import Base, engine, async_session
-from .models import User, Message
+from .base import Base
 
-__all = [
+__all__ = [
     'Base',
-    'engine',
-    'async_session',
-    'User',
-    'Message',
 ]

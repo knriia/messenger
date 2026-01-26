@@ -22,4 +22,4 @@ class MessageRepository:
 
     async def get_by_id(self, message_id: int) -> Message | None:
         result = await self._session.execute(select(Message).where(Message.id == message_id))
-        result.scalar_one_or_none()
+        return result.scalar_one_or_none()
