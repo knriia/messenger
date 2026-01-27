@@ -1,13 +1,14 @@
-from dishka import Provider, Scope, provide
+from typing import AsyncGenerator
 
-from app.core.security import SecurityService
+from dishka import Provider, Scope, provide
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
+
+from app.services.security import SecurityService
 from app.database.repositories.user import UserRepository
 from app.services.auth import AuthService
 from app.services.chat import ChatService
 from app.services.connection_manager import ConnectionManager
-from typing import AsyncGenerator
 from app.core.config import Settings
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
 
 
 class DatabaseProvider(Provider):

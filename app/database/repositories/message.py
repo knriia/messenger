@@ -2,15 +2,14 @@ from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models import Message
-from app.schemas.message import MessageCreate
 
 
 class MessageRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def create(self, message_data: MessageCreate) -> Message:
-        stmt = insert(Message).values(**message_data.model_dump()).returning(Message)
+    async def create(self, **kwargs) -> Message:
+        stmt = insert(Message).values(**kwargs).returning(Message)
         result = await self._session.execute(stmt)
         await self._session.commit()
         return result.scalar_one()
