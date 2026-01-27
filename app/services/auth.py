@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from app.database.repositories.user import UserRepository
 from app.schemas.user import UserCreate
-from app.core.security import SecurityService
+from app.services.security import SecurityService
 from app.database.models import User
 
 
@@ -10,7 +10,7 @@ class AuthService:
         self.repository = repository
         self.security_service = security_service
 
-    async def register(self, user_data: UserCreate) -> User:
+    async def register_user(self, user_data: UserCreate) -> User:
         existing_user = await self.repository.get_by_username(user_data.username)
         if existing_user:
             raise HTTPException(

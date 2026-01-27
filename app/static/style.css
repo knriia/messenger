@@ -1,29 +1,130 @@
-body {
-    background-color: #f0f2f5;
+/* Переменные CSS для удобства управления цветами */
+:root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --card-bg: rgba(255, 255, 255, 0.95);
 }
 
-#messages {
-    height: 450px;
-    background: white;
-    border-radius: 12px;
+/* Общие стили и фон */
+body {
+    background: var(--bg-gradient);
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+/* Стили для карточки авторизации (Glassmorphism) */
+.auth-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 40px; /* Отступы, которые определяют ширину полей и кнопки */
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок и подзаголовок */
+#auth-title {
+    margin-bottom: 5px;
+}
+
+#auth-subtitle {
+    margin-bottom: 25px; /* Увеличено расстояние до поля ввода */
+    color: #64748b;
+}
+
+/* Контейнер для полей ввода с плавающими лейблами */
+.input-group-custom {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+/* !!! ИСПРАВЛЕНИЕ ШИРИНЫ: box-sizing: border-box; применен ко всем элементам формы и кнопке */
+.auth-card input,
+.btn-primary-modern {
+    box-sizing: border-box;
+}
+
+.input-group-custom input {
+    width: 100%; /* Поля ввода теперь имеют 100% ширины родителя */
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group-custom label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+/* Анимация лейбла при фокусе/заполнении */
+.input-group-custom input:focus ~ label,
+.input-group-custom input:valid ~ label {
+    top: -10px;
+    left: 10px;
+    font-size: 12px;
+    background: white;
+    padding: 0 5px;
+    color: var(--primary);
+}
+
+/* Современная кнопка "Войти" */
+.btn-primary-modern {
+    width: 100%; /* Кнопка имеет ту же ширину, что и поля ввода */
+    padding: 14px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-primary-modern:hover {
+    background: var(--primary-hover);
+}
+
+/* Футер с ссылкой регистрации */
+.auth-footer {
+    margin-top: 30px; /* Увеличено расстояние до кнопки */
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Стили для блока чата (если вы используете Bootstrap классы для него) */
+#chat-block {
+    max-width: 600px;
+    width: 100%;
+    background: #ffffff;
 }
 
 .msg-item {
-    padding: 8px 12px;
-    border-radius: 15px;
+    padding: 8px 15px;
     background: #e9ecef;
-    align-self: flex-start;
-    max-width: 80%;
-    font-family: sans-serif;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border-radius: 18px;
+    max-width: 85%;
+    width: fit-content;
+    font-size: 0.95rem;
 }
 
-/* Стили для своих сообщений (позже добавим логику) */
-.my-message {
-    background: #007bff;
-    color: white;
-    align-self: flex-end;
-}
+/* Утилитарный класс из Bootstrap, продублированный */
+.d-none { display: none !important; }

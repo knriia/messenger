@@ -10,7 +10,7 @@ class ChatService:
         self.message_repo = MessageRepository(session)
 
     async def save_message(self, message_data: MessageCreate) -> Message:
-        return await self.message_repo.create(message_data=message_data)
+        return await self.message_repo.create(**message_data.model_dump())
 
 
     async def get_recent_messages(self, limit: int = 50) -> list[Message]:
