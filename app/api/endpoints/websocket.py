@@ -1,14 +1,12 @@
 from typing import Annotated
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, status
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi.params import Depends
 
 from app.services.connection_manager import ConnectionManager
 from app.services.chat import ChatService
 from app.services.security import SecurityService
 from app.database.repositories.user import UserRepository
 from app.schemas.message import MessageCreate
-from app.core.dependencies import oauth2_scheme
 
 
 websocket_router = APIRouter()
@@ -37,7 +35,7 @@ async def websocket_endpoint(
     try:
         recent_messages = await chat_service.get_recent_messages(limit=50)
         for message in reversed(recent_messages):
-            await websocket.send_text(f"User {message.user_id}: {message.text}")
+            await websocket.send_json({"user_id": message.user_id, "text": message.text})
 
         while True:
             data = await websocket.receive_text()
@@ -45,7 +43,7 @@ async def websocket_endpoint(
             message_data = MessageCreate(text=data, user_id=user_id)
             new_message = await chat_service.save_message(message_data=message_data)
 
-            format_message = f"User {user_id}: {new_message.text}"
+            format_message = {"user_id": user_id, "text": new_message.text}
             await manager.broadcast(message_text=format_message)
 
     except WebSocketDisconnect:

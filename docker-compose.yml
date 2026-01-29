@@ -41,5 +41,21 @@ services:
       migrations:
         condition: service_completed_successfully
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      # ИЗМЕНЕНО: Используем имя сервиса 'app' вместо 'localhost'
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      # ИЗМЕНЕНО: Зависимость от сервиса 'app' вместо 'backend'
+      - app
+
 volumes:
   postgres_data:
