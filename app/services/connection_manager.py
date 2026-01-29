@@ -16,13 +16,13 @@ class ConnectionManager:
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
 
-    async def broadcast(self, message_text: str):
+    async def broadcast(self, message_text: dict):
         task = [self._send_safe(conn, message_text) for conn in self.active_connections]
         await asyncio.gather(*task, return_exceptions=True)
 
-    async def _send_safe(self, websocket: WebSocket, message_text: str):
+    async def _send_safe(self, websocket: WebSocket, message_text: dict):
         try:
-            await websocket.send_text(message_text)
+            await websocket.send_json(message_text)
         except (WebSocketDisconnect, RuntimeError, BrokenResourceError):
             await self.disconnect(websocket)
         except Exception as e:
