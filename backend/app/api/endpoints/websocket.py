@@ -1,4 +1,4 @@
-"""Эндпоинт вебсокета"""
+"""WebSocket эндпоинт приложения."""
 
 from typing import Annotated
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, status

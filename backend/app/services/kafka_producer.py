@@ -1,7 +1,9 @@
+"""Сервис отправки сообщений в Kafka."""
+
 from aiokafka import AIOKafkaProducer
 import json
 
-from app.schemas.message import MessageCreateDTO
+from app.schemas.message import MessageCreate
 
 
 class KafkaProducerService:
@@ -9,7 +11,7 @@ class KafkaProducerService:
         self.producer = producer
         self.topic = topic
 
-    async def send_message(self, message_data: MessageCreateDTO):
+    async def send_message(self, message_data: MessageCreate):
         message_dict = message_data.model_dump()
         payload = json.dumps(message_dict).encode("utf-8")
         await self.producer.send_and_wait(self.topic, payload)

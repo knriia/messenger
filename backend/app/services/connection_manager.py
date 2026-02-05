@@ -1,3 +1,5 @@
+"""Менеджер WebSocket-соединений."""
+
 import asyncio
 
 from anyio import BrokenResourceError

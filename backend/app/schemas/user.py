@@ -1,3 +1,5 @@
+"""Схемы данных пользователей."""
+
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 

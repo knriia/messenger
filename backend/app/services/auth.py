@@ -1,3 +1,5 @@
+"""Сервис аутентификации и авторизации."""
+
 from fastapi import HTTPException, status
 from app.database.repositories.user import UserRepository
 from app.schemas.token import TokenPayload

@@ -1,3 +1,5 @@
+"""Конфигурация внедрения зависимостей (DI)."""
+
 from typing import AsyncGenerator
 
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer

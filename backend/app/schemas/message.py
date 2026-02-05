@@ -1,7 +1,9 @@
+"""Схема для создания нового сообщения."""
+
 from pydantic import BaseModel
 
 
-class MessageCreateDTO(BaseModel):
+class MessageCreate(BaseModel):
     sender_id: int
     chat_id: int
     content: str

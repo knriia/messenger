@@ -1,3 +1,5 @@
+"""Модель сущности пользователя."""
+
 from typing import TYPE_CHECKING
 from datetime import datetime, timezone
 from sqlalchemy import String, Boolean, DateTime

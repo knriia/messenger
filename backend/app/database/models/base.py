@@ -1,3 +1,5 @@
+"""Базовый класс для всех моделей базы данных."""
+
 from sqlalchemy.orm import DeclarativeBase
 
 

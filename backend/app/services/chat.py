@@ -1,5 +1,6 @@
-from app.database.models.message import Message
-from app.schemas.message import MessageCreateDTO
+"""Сервис управления чатом."""
+
+from app.schemas.message import MessageCreate
 from app.services.connection_manager import ConnectionManager
 from app.services.kafka_producer import KafkaProducerService
 
@@ -13,7 +14,7 @@ class ChatService:
         self.kafka_producer_service = kafka_producer_service
         self.connection_manager = connection_manager
 
-    async def send_new_message(self, message_data: MessageCreateDTO) -> dict[str, str]:
+    async def send_new_message(self, message_data: MessageCreate) -> dict[str, str]:
         await self.kafka_producer_service.send_message(message_data=message_data)
 
         payload = {

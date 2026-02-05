@@ -1,4 +1,6 @@
-from sqlalchemy import select, insert
+"""Репозиторий для работы с сущностью пользователя."""
+
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models.user import User

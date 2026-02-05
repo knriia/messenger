@@ -1,3 +1,5 @@
+"""Модель сущности сообщения."""
+
 from typing import Optional, TYPE_CHECKING
 from datetime import datetime, timezone
 from sqlalchemy import ForeignKey, String, DateTime, Text, Boolean
