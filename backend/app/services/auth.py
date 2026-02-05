@@ -9,8 +9,8 @@ from app.database.models.user import User
 
 
 class AuthService:
-    def __init__(self, repository: UserRepository, security_service: SecurityService):
-        self.repository = repository
+    def __init__(self, user_repository: UserRepository, security_service: SecurityService):
+        self.repository = user_repository
         self.security_service = security_service
 
     async def register_user(self, user_data: UserCreate) -> User:

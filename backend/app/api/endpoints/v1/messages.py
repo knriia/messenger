@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends
 from dishka.integrations.fastapi import FromDishka, inject
 
 from app.schemas.message import MessageCreate
-from app.services.chat import ChatService
+from app.services.message.chat import ChatService
 from app.database.models.user import User
-from app.core.dependencies import get_current_user
+from app.api.dependencies import get_current_user
 
 
 messages_router = APIRouter(prefix='/messages', tags=['Messeges'])

@@ -2,20 +2,20 @@
 
 from app.schemas.message import MessageCreate
 from app.services.connection_manager import ConnectionManager
-from app.services.kafka_producer import KafkaProducerService
+from app.infrastructure.kafka.producer.message import MessageKafkaProducer
 
 
 class ChatService:
     def __init__(
         self,
-        kafka_producer_service: KafkaProducerService,
+        message_kafka_producer: MessageKafkaProducer,
         connection_manager: ConnectionManager
     ):
-        self.kafka_producer_service = kafka_producer_service
+        self.message_kafka_producer = message_kafka_producer
         self.connection_manager = connection_manager
 
     async def send_new_message(self, message_data: MessageCreate) -> dict[str, str]:
-        await self.kafka_producer_service.send_message(message_data=message_data)
+        await self.message_kafka_producer.send_message(message_data=message_data)
 
         payload = {
             "type": 'new_message',

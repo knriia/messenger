@@ -1,15 +1,14 @@
 """Точка входа в воркер Kafka."""
 
 import asyncio
-from dishka import make_async_container
-from app.di.container import DatabaseProvider, KafkaProvider
-from app.services.kafka_consumer import KafkaConsumerService
+from app.di.container import get_container
+from app.infrastructure.kafka.consumer.message import MessageKafkaConsumer
 
 
 async def main():
-    container = make_async_container(DatabaseProvider(), KafkaProvider())
+    container = get_container()
     try:
-        consumer_service = await container.get(KafkaConsumerService)
+        consumer_service = await container.get(MessageKafkaConsumer)
         await consumer_service.start(container)
     except Exception as e:
         print(f"Worker crashed: {e}")

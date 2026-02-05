@@ -6,7 +6,7 @@ import json
 from app.schemas.message import MessageCreate
 
 
-class KafkaProducerService:
+class MessageKafkaProducer:
     def __init__(self, producer: AIOKafkaProducer, topic: str):
         self.producer = producer
         self.topic = topic

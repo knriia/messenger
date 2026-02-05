@@ -15,7 +15,7 @@ from app.schemas.message import MessageCreate
 logger = logging.getLogger(__name__)
 
 
-class KafkaConsumerService:
+class MessageKafkaConsumer:
     def __init__(self, consumer: AIOKafkaConsumer):
         self.consumer = consumer
 
