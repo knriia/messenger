@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Docker & Config
+.dockerignore
+Dockerfile
+docker-compose.yml
+.env
+.git
+.gitignore
+
+# Tests & Coverage
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local logs and temp files
+*.log
+tmp/
