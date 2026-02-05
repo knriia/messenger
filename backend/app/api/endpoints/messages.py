@@ -1,8 +1,10 @@
+"""Эндпоинты управления сообщениями."""
+
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from dishka.integrations.fastapi import FromDishka, inject
 
-from app.schemas.message import MessageCreateDTO
+from app.schemas.message import MessageCreate
 from app.services.chat import ChatService
 from app.database.models.user import User
 from app.core.dependencies import get_current_user
@@ -18,7 +20,7 @@ async def send_message(
     current_user: Annotated[User, Depends(get_current_user)],
     chat_service: FromDishka[ChatService]
 ):
-    message_data = MessageCreateDTO(
+    message_data = MessageCreate(
         sender_id=current_user.id,
         chat_id=chat_id,
         content=content

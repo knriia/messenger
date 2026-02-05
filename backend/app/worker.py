@@ -1,3 +1,5 @@
+"""Точка входа в воркер Kafka."""
+
 import asyncio
 from dishka import make_async_container
 from app.di.container import DatabaseProvider, KafkaProvider

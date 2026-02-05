@@ -1,3 +1,5 @@
+"""Менеджер сессий базы данных."""
+
 from typing import AsyncGenerator
 from contextlib import asynccontextmanager
 

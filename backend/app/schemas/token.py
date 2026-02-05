@@ -1,3 +1,5 @@
+"""Схемы JWT-токенов."""
+
 from datetime import datetime
 
 from pydantic import BaseModel

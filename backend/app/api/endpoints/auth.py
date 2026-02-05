@@ -1,5 +1,4 @@
-"""Эндпоинты решистрации и авторизации"""
-
+"""Эндпоинты регистрации и авторизации"""
 
 from typing import Annotated
 from fastapi import APIRouter, Depends, status

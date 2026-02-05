@@ -1,3 +1,5 @@
+"""Сервис прослушивания сообщений Kafka."""
+
 import asyncio
 
 from aiokafka import AIOKafkaConsumer
@@ -8,7 +10,7 @@ from aiokafka.errors import GroupCoordinatorNotAvailableError
 from dishka import AsyncContainer
 
 from app.database.repositories.message import MessageRepository
-from app.schemas.message import MessageCreateDTO
+from app.schemas.message import MessageCreate
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +34,7 @@ class KafkaConsumerService:
                 async with container() as request_container:
                     try:
                         data = json.loads(msg.value.decode('utf-8'))
-                        message_dto = MessageCreateDTO(**data)
+                        message_dto = MessageCreate(**data)
                         message_repo = await request_container.get(MessageRepository)
                         await message_repo.create_message(message_data=message_dto)
                     except Exception as e:
