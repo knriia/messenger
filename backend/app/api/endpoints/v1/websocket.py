@@ -8,7 +8,7 @@ from dishka.integrations.fastapi import FromDishka, inject
 
 from app.services.connection_manager import ConnectionManager
 from app.services.security import SecurityService
-from app.database.repositories.user import UserRepository
+from app.database.repositories.user_repo import UserRepository
 
 
 websocket_router = APIRouter(prefix="/v1/ws", tags=["WebSocket"])

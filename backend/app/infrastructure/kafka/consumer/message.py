@@ -11,8 +11,8 @@ from dishka import AsyncContainer
 from redis.asyncio import Redis
 
 from app.core.config import Settings
-from app.database.repositories.chat_member import ChatMemberRepository
-from app.database.repositories.message import MessageRepository
+from app.database.repositories.chat_member_repo import ChatMemberRepository
+from app.database.repositories.message_repo import MessageRepository
 from app.schemas.message import MessageCreate, MessageRead
 from app.schemas.notification import RedisChatNotification
 

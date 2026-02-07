@@ -6,7 +6,7 @@ from app. database.models.chat import Chat
 
 class ChatRepository:
     def __init__(self, session: AsyncSession):
-        self.session = session
+        self._session = session
 
     @staticmethod
     def _generate_private_hash(user_ids: list[int]) -> str:
@@ -17,7 +17,7 @@ class ChatRepository:
     async def get_private_chat_by_hash(self, user_ids: list[int]) -> Chat | None:
         chat_hash = self._generate_private_hash(user_ids=user_ids)
         stmt = select(Chat).where(Chat.private_hash == chat_hash, Chat.chat_type == 'private')
-        result = await self.session.execute(stmt)
+        result = await self._session.execute(stmt)
         return result.scalar_one_or_none()
 
     async def create_chat(
@@ -35,6 +35,6 @@ class ChatRepository:
             private_hash=p_hash,
             name="Saved Messages" if len(user_ids) == 1 else name
         )
-        self.session.add(new_chat)
-        await self.session.flush()
+        self._session.add(new_chat)
+        await self._session.flush()
         return new_chat

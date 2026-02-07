@@ -3,8 +3,8 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.repositories.chat import ChatRepository
-from app.database.repositories.chat_member import ChatMemberRepository
+from app.database.repositories.chat_repo import ChatRepository
+from app.database.repositories.chat_member_repo import ChatMemberRepository
 from app.services.chat_management import ChatManagementService
 
 
