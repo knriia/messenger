@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     KAFKA_BOOTSTRAP_SERVERS: str
     DATABASE_HOST: str
     KAFKA_MESSAGES_TOPIC: str
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_NOTIFICATIONS_CHANNEL: str
 
     @property
     def db_url(self) -> str:

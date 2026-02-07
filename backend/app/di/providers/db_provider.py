@@ -3,10 +3,9 @@
 from typing import AsyncGenerator
 
 from dishka import Provider, Scope, provide
-from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.database.session import DatabaseSessionManager
-from app.database.repositories.user import UserRepository
-from app.database.repositories.message import MessageRepository
 from app.core.config import Settings
 
 
@@ -21,11 +20,3 @@ class DBProvider(Provider):
     async def get_session(self, db_manager: DatabaseSessionManager) -> AsyncGenerator[AsyncSession, None]:
         async with db_manager.get_session() as session:
             yield session
-
-    @provide(scope=Scope.REQUEST)
-    def get_user_repository(self, session: AsyncSession) -> UserRepository:
-        return UserRepository(session=session)
-
-    @provide(scope=Scope.REQUEST)
-    def get_message_repository(self, session: AsyncSession) -> MessageRepository:
-        return MessageRepository(session=session)
