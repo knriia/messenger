@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     KAFKA_BOOTSTRAP_SERVERS: str
-    DATABASE_HOST: str = 'db'
-    KAFKA_MESSAGES_TOPIC: str = "chat_messages"
+    DATABASE_HOST: str
+    KAFKA_MESSAGES_TOPIC: str
 
     @property
     def db_url(self) -> str:

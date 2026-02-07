@@ -1,0 +1,57 @@
+services:
+  migrations:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    command: alembic -c app/database/migrations/alembic.ini upgrade head
+    env_file: ../.env
+    volumes:
+      - ../backend:/backend_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend:
+    build: ../backend
+    ports:
+      - "${PORT_BACKEND:-8000}:8000"
+    env_file: ../.env
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+    volumes:
+      - ../backend:/backend_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+
+  worker:
+    build: ../backend
+    command: python -m app.worker
+    env_file: ../.env
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+    ports:
+      - "${PORT_FRONTEND:-5173}:5173"
+    env_file: ../.env
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
