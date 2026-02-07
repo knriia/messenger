@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import UniqueConstraint, Index
 
 from app.database.models.base import Base
-
+from ...core.consts import UserRole
 
 if TYPE_CHECKING:
     from .user import User
@@ -36,7 +36,7 @@ class ChatMember(Base):
 
     role: Mapped[str] = mapped_column(
         String(20),
-        default="member",
+        default=UserRole.MEMBER,
         nullable=False,
         comment="Роль: owner, admin, member"
     )
