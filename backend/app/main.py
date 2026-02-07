@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dishka.integrations.fastapi import setup_dishka
 
+from app.api.endpoints.v1.chat import chat_router
 from app.di.container import get_container
 from app.api.endpoints.v1.auth import auth_router
 from app.api.endpoints.v1.websocket import websocket_router
@@ -20,6 +21,7 @@ def create_app() -> FastAPI:
     fastapi_app.include_router(auth_router)
     fastapi_app.include_router(websocket_router)
     fastapi_app.include_router(messages_router)
+    fastapi_app.include_router(chat_router)
 
     # CORS
     fastapi_app.add_middleware(

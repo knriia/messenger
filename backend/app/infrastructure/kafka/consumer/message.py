@@ -8,9 +8,13 @@ import logging
 
 from aiokafka.errors import GroupCoordinatorNotAvailableError
 from dishka import AsyncContainer
+from redis.asyncio import Redis
 
+from app.core.config import Settings
+from app.database.repositories.chat_member import ChatMemberRepository
 from app.database.repositories.message import MessageRepository
-from app.schemas.message import MessageCreate
+from app.schemas.message import MessageCreate, MessageRead
+from app.schemas.notification import RedisChatNotification
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +40,19 @@ class MessageKafkaConsumer:
                         data = json.loads(msg.value.decode('utf-8'))
                         message_dto = MessageCreate(**data)
                         message_repo = await request_container.get(MessageRepository)
-                        await message_repo.create_message(message_data=message_dto)
+                        member_repo = await request_container.get(ChatMemberRepository)
+                        saved_message = await message_repo.create_message(message_data=message_dto)
+                        redis = await request_container.get(Redis)
+                        settings = await request_container.get(Settings)
+                        recipients = await member_repo.get_chat_member_ids(saved_message.chat_id)
+                        notification = RedisChatNotification(
+                            recipient_ids=recipients,
+                            payload=MessageRead.model_validate(saved_message)
+                        )
+                        await redis.publish(
+                            settings.REDIS_CHAT_CHANNEL,
+                            notification.model_dump_json()
+                        )
                     except Exception as e:
                         logger.error(f"❌ Error processing message: {e}")
         finally:
