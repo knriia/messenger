@@ -1,7 +1,9 @@
 import hashlib
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app. database.models.chat import Chat
+
+from app.database.models.chat import Chat
+from app.core.consts import ChatType
 
 
 class ChatRepository:
@@ -16,7 +18,7 @@ class ChatRepository:
 
     async def get_private_chat_by_hash(self, user_ids: list[int]) -> Chat | None:
         chat_hash = self._generate_private_hash(user_ids=user_ids)
-        stmt = select(Chat).where(Chat.private_hash == chat_hash, Chat.chat_type == 'private')
+        stmt = select(Chat).where(Chat.private_hash == chat_hash, Chat.chat_type == ChatType.PRIVATE)
         result = await self._session.execute(stmt)
         return result.scalar_one_or_none()
 
@@ -27,7 +29,7 @@ class ChatRepository:
         name: str | None = None,
         user_ids: list[int] = None
     ) -> Chat:
-        p_hash = self._generate_private_hash(user_ids) if chat_type == "private" else None
+        p_hash = self._generate_private_hash(user_ids) if chat_type == ChatType.PRIVATE else None
 
         new_chat = Chat(
             creator_id=creator_id,

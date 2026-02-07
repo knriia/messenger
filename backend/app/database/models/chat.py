@@ -8,6 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Index
 
 from app.database.models.base import Base
+from app.core.consts import ChatType
 
 
 if TYPE_CHECKING:
@@ -37,7 +38,7 @@ class Chat(Base):
 
     chat_type: Mapped[str] = mapped_column(
         String(20),
-        default="private",
+        default=ChatType.PRIVATE,
         nullable=False,
         comment="Тип чата: private (личный), group (групповой), channel (канал)"
     )
@@ -121,7 +122,7 @@ class Chat(Base):
         if self.name:
             return self.name
 
-        if self.chat_type == "private":
+        if self.chat_type == ChatType.PRIVATE:
             if self.members:
                 other_members = [m.user for m in self.members if m.user_id != self.creator_id]
                 if other_members:

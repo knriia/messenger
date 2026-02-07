@@ -1,3 +1,4 @@
+from app.core.consts import ChatType
 from app.database.uow import UnitOfWork
 
 
@@ -14,7 +15,7 @@ class ChatManagementService:
         try:
             chat = await self.uow.chats.create_chat(
                 creator_id=creator_id,
-                chat_type="private",
+                chat_type=ChatType.PRIVATE,
                 user_ids=user_ids
             )
 
