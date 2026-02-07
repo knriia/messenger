@@ -3,7 +3,7 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.repositories.message import MessageRepository
+from app.database.repositories.message_repo import MessageRepository
 from app.infrastructure.kafka.producer.message import MessageKafkaProducer
 from app.services.message import MessageService
 from app.services.connection_manager import ConnectionManager

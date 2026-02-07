@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from dishka.integrations.fastapi import FromDishka, inject
 
 from app.services.security import SecurityService
-from app.database.repositories.user import UserRepository
+from app.database.repositories.user_repo import UserRepository
 from app.database.models.user import User
 
 

@@ -1,7 +1,7 @@
 """Сервис аутентификации и авторизации."""
 
 from fastapi import HTTPException, status
-from app.database.repositories.user import UserRepository
+from app.database.repositories.user_repo import UserRepository
 from app.schemas.token import TokenPayload
 from app.schemas.user import UserCreate
 from app.services.security import SecurityService

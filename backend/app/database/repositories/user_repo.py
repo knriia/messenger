@@ -24,6 +24,12 @@ class UserRepository:
             await self._session.rollback()
             raise
 
+    async def search_users(self, query: str, limit: int = 10) -> list[User]:
+        stmt = select(User).where(User.username.ilike(f"{query}")).limit(limit=limit)
+        result = await self._session.execute(stmt)
+        return list(result.scalars().all())
+
+
     async def get_by_username(self, username: str) -> User | None:
         result = await self._session.execute(select(User).where(User.username == username))
         return result.scalar_one_or_none()
