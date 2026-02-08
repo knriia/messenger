@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import UniqueConstraint, Index
 
 from app.database.models.base import Base
-from ...core.consts import UserRole
+from app.domain.consts import UserRole
 
 if TYPE_CHECKING:
     from .user import User

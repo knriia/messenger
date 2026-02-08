@@ -1,4 +1,4 @@
-from app.core.consts import ChatType
+from app.domain.consts import ChatType
 from app.database.uow import UnitOfWork
 
 
