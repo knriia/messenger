@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Index
 
 from app.database.models.base import Base
-from app.core.consts import ChatType
+from app.domain.consts import ChatType
 
 
 if TYPE_CHECKING:

@@ -6,7 +6,7 @@ from sqlalchemy import ForeignKey, String, DateTime, Text, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.models.base import Base
-from ...core.consts import MessageType
+from app.domain.consts import MessageType
 
 if TYPE_CHECKING:
     from .chat import Chat

@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models.chat import Chat
-from app.core.consts import ChatType
+from app.domain.consts import ChatType
 
 
 class ChatRepository:
