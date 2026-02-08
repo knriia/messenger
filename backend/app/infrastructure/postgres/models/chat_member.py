@@ -7,7 +7,7 @@ from sqlalchemy import String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import UniqueConstraint, Index
 
-from app.database.models.base import Base
+from app.infrastructure.postgres.models.base import Base
 from app.domain.consts import UserRole
 
 if TYPE_CHECKING:
@@ -36,7 +36,7 @@ class ChatMember(Base):
 
     role: Mapped[str] = mapped_column(
         String(20),
-        default=UserRole.MEMBER,
+        default=UserRole.MEMBER.value,
         nullable=False,
         comment="Роль: owner, admin, member"
     )

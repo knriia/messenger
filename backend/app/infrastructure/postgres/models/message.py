@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from sqlalchemy import ForeignKey, String, DateTime, Text, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database.models.base import Base
+from app.infrastructure.postgres.models.base import Base
 from app.domain.consts import MessageType
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ class Message(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     message_type: Mapped[str] = mapped_column(
         String(30),
-        default=MessageType.TEXT,
+        default=MessageType.TEXT.value,
         nullable=False,
         comment='Тип сообщения: text, image, file'
     )

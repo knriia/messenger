@@ -5,13 +5,13 @@ from typing import AsyncGenerator
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.repositories.chat_member_repo import ChatMemberRepository
-from app.database.repositories.chat_repo import ChatRepository
-from app.database.repositories.message_repo import MessageRepository
-from app.database.repositories.user_repo import UserRepository
-from app.database.session import DatabaseSessionManager
+from app.infrastructure.postgres.repositories.chat_member_repo import ChatMemberRepository
+from app.infrastructure.postgres.repositories.chat_repo import ChatRepository
+from app.infrastructure.postgres.repositories.message_repo import MessageRepository
+from app.infrastructure.postgres.repositories.user_repo import UserRepository
+from app.infrastructure.postgres.session import DatabaseSessionManager
 from app.core.config import Settings
-from app.database.uow import UnitOfWork
+from app.infrastructure.postgres.uow import UnitOfWork
 
 
 class DBProvider(Provider):

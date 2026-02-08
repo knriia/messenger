@@ -1,10 +1,10 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 from dishka.integrations.fastapi import FromDishka, inject
 
 from app.api.dependencies import get_current_user
-from app.database.models.user import User
-from app.database.repositories.user_repo import UserRepository
+from app.infrastructure.postgres.models.user import User
+from app.infrastructure.postgres.repositories.user_repo import UserRepository
 from app.schemas.user import UserOut
 
 

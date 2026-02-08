@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database.models.chat_member import ChatMember
+from app.infrastructure.postgres.models.chat_member import ChatMember
 
 
 class ChatMemberRepository:

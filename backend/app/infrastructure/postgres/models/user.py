@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from sqlalchemy import String, Boolean, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database.models.base import Base
+from app.infrastructure.postgres.models.base import Base
 
 
 if TYPE_CHECKING:
