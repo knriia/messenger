@@ -2,7 +2,7 @@
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.models.message import Message
+from app.infrastructure.postgres.models.message import Message
 from app.schemas.message import MessageCreate
 
 

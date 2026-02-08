@@ -6,8 +6,8 @@ from fastapi.security import OAuth2PasswordBearer
 from dishka.integrations.fastapi import FromDishka, inject
 
 from app.services.security import SecurityService
-from app.database.repositories.user_repo import UserRepository
-from app.database.models.user import User
+from app.infrastructure.postgres.repositories.user_repo import UserRepository
+from app.infrastructure.postgres.models.user import User
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")

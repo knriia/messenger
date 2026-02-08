@@ -3,7 +3,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.models.user import User
+from app.infrastructure.postgres.models.user import User
 from app.schemas.user import UserCreate
 
 

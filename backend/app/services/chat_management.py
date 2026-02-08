@@ -1,5 +1,5 @@
 from app.domain.consts import ChatType
-from app.database.uow import UnitOfWork
+from app.infrastructure.postgres.uow import UnitOfWork
 
 
 class ChatManagementService:

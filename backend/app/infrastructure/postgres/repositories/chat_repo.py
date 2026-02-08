@@ -2,7 +2,7 @@ import hashlib
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.models.chat import Chat
+from app.infrastructure.postgres.models.chat import Chat
 from app.domain.consts import ChatType
 
 

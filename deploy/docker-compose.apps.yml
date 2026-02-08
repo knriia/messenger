@@ -3,7 +3,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    command: alembic -c app/database/migrations/alembic.ini upgrade head
+    command: alembic -c app/infrastructure/postgres/migrations/alembic.ini upgrade head
     env_file: ../.env
     volumes:
       - ../backend:/backend_app

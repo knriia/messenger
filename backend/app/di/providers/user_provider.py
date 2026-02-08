@@ -3,7 +3,7 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.repositories.user_repo import UserRepository
+from app.infrastructure.postgres.repositories.user_repo import UserRepository
 from app.core.config import Settings
 from app.services.auth import AuthService
 from app.services.security import SecurityService

@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.repositories.chat_repo import ChatRepository
-from app.database.repositories.chat_member_repo import ChatMemberRepository
-from app.database.repositories.message_repo import MessageRepository
-from app.database.repositories.user_repo import UserRepository
+from app.infrastructure.postgres.repositories.chat_repo import ChatRepository
+from app.infrastructure.postgres.repositories.chat_member_repo import ChatMemberRepository
+from app.infrastructure.postgres.repositories.message_repo import MessageRepository
+from app.infrastructure.postgres.repositories.user_repo import UserRepository
 
 
 class UnitOfWork:

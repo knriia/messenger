@@ -7,7 +7,7 @@ from sqlalchemy import String, DateTime, ForeignKey, Text, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Index
 
-from app.database.models.base import Base
+from app.infrastructure.postgres.models.base import Base
 from app.domain.consts import ChatType
 
 
@@ -38,7 +38,7 @@ class Chat(Base):
 
     chat_type: Mapped[str] = mapped_column(
         String(20),
-        default=ChatType.PRIVATE,
+        default=ChatType.PRIVATE.value,
         nullable=False,
         comment="Тип чата: private (личный), group (групповой), channel (канал)"
     )
@@ -122,7 +122,7 @@ class Chat(Base):
         if self.name:
             return self.name
 
-        if self.chat_type == ChatType.PRIVATE:
+        if self.chat_type == ChatType.PRIVATE.value:
             if self.members:
                 other_members = [m.user for m in self.members if m.user_id != self.creator_id]
                 if other_members:
