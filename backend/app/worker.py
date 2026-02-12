@@ -2,16 +2,14 @@
 
 import asyncio
 from app.di.container import get_container
-from app.infrastructure.kafka.consumer.message import MessageKafkaConsumer
+from app.domain.interfaces.processor import IMessageProcessor
 
 
 async def main():
     container = get_container()
     try:
-        consumer_service = await container.get(MessageKafkaConsumer)
-        await consumer_service.start(container)
-    except Exception as e:
-        print(f"Worker crashed: {e}")
+        processor = await container.get(IMessageProcessor)
+        await processor.start()
     finally:
         await container.close()
 

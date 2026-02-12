@@ -24,10 +24,4 @@ class DatabaseSessionManager:
     @asynccontextmanager
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with self._session_maker() as session:
-            try:
-                yield session
-            except Exception as e:
-                await session.rollback()
-                raise
-            finally:
-                await session.close()
+            yield session

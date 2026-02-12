@@ -3,33 +3,30 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.domain.entities.user_entity import UserEntity
+from app.domain.interfaces.user_repo import IUserRepository
+from app.infrastructure.postgres.mappers.user_mapper import UserMapper
 from app.infrastructure.postgres.models.user import User
-from app.schemas.user import UserCreate
 
 
-class UserRepository:
+class UserRepository(IUserRepository):
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def create_user(self, user_data: UserCreate, hashed_password: str) -> User:
-        user_dict = user_data.model_dump(exclude={'password'})
-        user_dict['hashed_password'] = hashed_password
-        new_user = User(**user_dict)
+    async def create_user(self, username: str, hashed_password: str) -> UserEntity:
+        new_user = User(username=username, hashed_password=hashed_password)
         self._session.add(new_user)
-        try:
-            await self._session.commit()
-            await self._session.refresh(new_user)
-            return new_user
-        except Exception:
-            await self._session.rollback()
-            raise
+        await self._session.flush()
+        return UserMapper.to_domain(new_user)
 
-    async def search_users(self, query: str, limit: int = 10) -> list[User]:
-        stmt = select(User).where(User.username.ilike(f"{query}")).limit(limit=limit)
+    async def search_users(self, query: str, limit: int = 10) -> list[UserEntity]:
+        stmt = select(User).where(User.username.ilike(f"%{query}%")).limit(limit=limit)
         result = await self._session.execute(stmt)
-        return list(result.scalars().all())
+        return [UserMapper.to_domain(u) for u in result.scalars().all()]
 
 
-    async def get_by_username(self, username: str) -> User | None:
-        result = await self._session.execute(select(User).where(User.username == username))
-        return result.scalar_one_or_none()
+    async def get_by_username(self, username: str) -> UserEntity | None:
+        stmt = select(User).where(User.username == username)
+        result = await self._session.execute(stmt)
+        db_user = result.scalar_one_or_none()
+        return UserMapper.to_domain(db_user) if db_user else None

@@ -5,13 +5,10 @@ from typing import AsyncGenerator
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.infrastructure.postgres.repositories.chat_member_repo import ChatMemberRepository
-from app.infrastructure.postgres.repositories.chat_repo import ChatRepository
-from app.infrastructure.postgres.repositories.message_repo import MessageRepository
-from app.infrastructure.postgres.repositories.user_repo import UserRepository
 from app.infrastructure.postgres.session import DatabaseSessionManager
 from app.core.config import Settings
 from app.infrastructure.postgres.uow import UnitOfWork
+from app.domain.interfaces.uow import IUnitOfWork
 
 
 class DBProvider(Provider):
@@ -27,18 +24,5 @@ class DBProvider(Provider):
             yield session
 
     @provide(scope=Scope.REQUEST)
-    def get_uow(
-        self,
-        session: AsyncSession,
-        chats: ChatRepository,
-        members: ChatMemberRepository,
-        messages: MessageRepository,
-        users: UserRepository,
-    ) -> UnitOfWork:
-        return UnitOfWork(
-            session=session,
-            chats=chats,
-            members=members,
-            messages=messages,
-            users=users,
-        )
+    def get_uow(self, session: AsyncSession) -> IUnitOfWork:
+        return UnitOfWork(session=session)
