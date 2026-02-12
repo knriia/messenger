@@ -1,8 +1,11 @@
 from abc import ABC, abstractmethod
-from app.domain.interfaces.user_repo import IUserRepository
-from app.domain.interfaces.chat_repo import IChatRepository
+from types import TracebackType
+
 from app.domain.interfaces.chat_member_repo import IChatMemberRepository
+from app.domain.interfaces.chat_repo import IChatRepository
 from app.domain.interfaces.message_repo import IMessageRepository
+from app.domain.interfaces.user_repo import IUserRepository
+
 
 class IUnitOfWork(ABC):
     users: IUserRepository
@@ -15,7 +18,12 @@ class IUnitOfWork(ABC):
         pass
 
     @abstractmethod
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         pass
 
     @abstractmethod

@@ -1,14 +1,14 @@
 """Провайдер доступа к данным: управление сессиями и репозиториями."""
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.infrastructure.postgres.session import DatabaseSessionManager
 from app.core.config import Settings
-from app.infrastructure.postgres.uow import UnitOfWork
 from app.domain.interfaces.uow import IUnitOfWork
+from app.infrastructure.postgres.session import DatabaseSessionManager
+from app.infrastructure.postgres.uow import UnitOfWork
 
 
 class DBProvider(Provider):

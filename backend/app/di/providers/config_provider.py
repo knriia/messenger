@@ -1,6 +1,7 @@
 """Провайдер настроек приложения"""
 
 from dishka import Provider, Scope, provide
+
 from app.core.config import Settings
 
 

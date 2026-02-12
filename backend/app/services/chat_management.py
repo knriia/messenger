@@ -1,6 +1,6 @@
+from app.domain.consts import UserRole
 from app.domain.entities.chat_entity import PrivateChatEntity
 from app.domain.interfaces.uow import IUnitOfWork
-from app.domain.consts import UserRole
 
 
 class ChatManagementService:
@@ -17,11 +17,7 @@ class ChatManagementService:
 
             for u_id in user_ids:
                 role = UserRole.OWNER if u_id == creator_id else UserRole.MEMBER
-                await self.uow.members.add_chat_member(
-                    chat_id=chat.id,
-                    user_id=u_id,
-                    role=role
-                )
+                await self.uow.members.add_chat_member(chat_id=chat.id, user_id=u_id, role=role)
 
             await self.uow.commit()
 

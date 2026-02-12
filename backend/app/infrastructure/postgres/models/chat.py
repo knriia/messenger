@@ -1,20 +1,19 @@
 """Модель сущности чата."""
 
-from datetime import datetime, timezone
-from typing import Optional, TYPE_CHECKING
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import String, DateTime, ForeignKey, Text, Boolean
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Index
 
-from app.infrastructure.postgres.models.base import Base
 from app.domain.consts import ChatType
-
+from app.infrastructure.postgres.models.base import Base
 
 if TYPE_CHECKING:
-    from .user import User
-    from .message import Message
     from .chat_member import ChatMember
+    from .message import Message
+    from .user import User
 
 
 class Chat(Base):
@@ -24,96 +23,76 @@ class Chat(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    name: Mapped[Optional[str]] = mapped_column(
-        String(100),
-        nullable=True,
-        comment="Название чата (для групповых чатов)"
-    )
+    name: Mapped[str | None] = mapped_column(String(100), nullable=True, comment="Название чата (для групповых чатов)")
 
-    description: Mapped[Optional[str]] = mapped_column(
-        Text,
-        nullable=True,
-        comment="Описание чата (для групповых)"
-    )
+    description: Mapped[str | None] = mapped_column(Text, nullable=True, comment="Описание чата (для групповых)")
 
     chat_type: Mapped[str] = mapped_column(
         String(20),
         default=ChatType.PRIVATE.value,
         nullable=False,
-        comment="Тип чата: private (личный), group (групповой), channel (канал)"
+        comment="Тип чата: private (личный), group (групповой), channel (канал)",
     )
 
     is_private: Mapped[bool] = mapped_column(
         Boolean,
         default=True,
         nullable=False,
-        comment="Приватный ли чат (True) или публичный (False)"
+        comment="Приватный ли чат (True) или публичный (False)",
     )
 
-    private_hash: Mapped[Optional[str]] = mapped_column(
+    private_hash: Mapped[str | None] = mapped_column(
         String(64),
         unique=True,
         index=True,
         nullable=True,
-        comment="Хэш для быстрого поиска приватных чатов между двумя пользователями"
+        comment="Хэш для быстрого поиска приватных чатов между двумя пользователями",
     )
 
     creator_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"),  # Если создатель удалится, чат остаётся
         nullable=False,
-        comment="ID пользователя, который создал чат"
+        comment="ID пользователя, который создал чат",
     )
 
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        default=True,
-        nullable=False,
-        comment="Активен ли чат"
-    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, comment="Активен ли чат")
 
-    avatar_url: Mapped[Optional[str]] = mapped_column(
-        String(500),
-        nullable=True,
-        comment="URL аватара чата"
-    )
+    avatar_url: Mapped[str | None] = mapped_column(String(500), nullable=True, comment="URL аватара чата")
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
         nullable=False,
-        comment="Дата создания чата"
+        comment="Дата создания чата",
     )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
         nullable=False,
-        comment="Дата последнего обновления (сообщения/настроек)"
+        comment="Дата последнего обновления (сообщения/настроек)",
     )
 
-    last_message_at: Mapped[Optional[datetime]] = mapped_column(
+    last_message_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
-        comment="Дата последнего сообщения в чате"
+        comment="Дата последнего сообщения в чате",
     )
 
-    creator: Mapped["User"] = relationship(
-        back_populates="created_chats",
-        foreign_keys=[creator_id]
-    )
+    creator: Mapped["User"] = relationship(back_populates="created_chats", foreign_keys=[creator_id])
 
     messages: Mapped[list["Message"]] = relationship(
         back_populates="chat",
         order_by="Message.created_at.desc()",  # Новые сообщения первыми
         cascade="all, delete-orphan",
-        lazy="dynamic"  # Для пагинации
+        lazy="dynamic",  # Для пагинации
     )
 
     members: Mapped[list["ChatMember"]] = relationship(
         back_populates="chat",
         cascade="all, delete-orphan",
-        lazy="selectin"  # Загружаем при загрузке чата
+        lazy="selectin",  # Загружаем при загрузке чата
     )
 
     @property
@@ -122,11 +101,10 @@ class Chat(Base):
         if self.name:
             return self.name
 
-        if self.chat_type == ChatType.PRIVATE.value:
-            if self.members:
-                other_members = [m.user for m in self.members if m.user_id != self.creator_id]
-                if other_members:
-                    return ", ".join([user.display_name for user in other_members[:2]])
+        if self.chat_type == ChatType.PRIVATE.value and self.members:
+            other_members = [m.user for m in self.members if m.user_id != self.creator_id]
+            if other_members:
+                return ", ".join([user.display_name for user in other_members[:2]])
 
         return f"Чат #{self.id}"
 
@@ -152,7 +130,7 @@ class Chat(Base):
         """Проверить, является ли пользователь участником чата"""
         return any(member.user_id == user_id for member in self.members)
 
-    def get_user_role(self, user_id: int) -> Optional[str]:
+    def get_user_role(self, user_id: int) -> str | None:
         """Получить роль пользователя в чате"""
         for member in self.members:
             if member.user_id == user_id:
@@ -164,7 +142,7 @@ class Chat(Base):
 
 
 __table_args__ = (
-    Index('ix_chats_creator', 'creator_id'),
-    Index('ix_chats_last_message', 'last_message_at', postgresql_using='btree'),
-    Index('ix_chats_type', 'chat_type'),
+    Index("ix_chats_creator", "creator_id"),
+    Index("ix_chats_last_message", "last_message_at", postgresql_using="btree"),
+    Index("ix_chats_type", "chat_type"),
 )

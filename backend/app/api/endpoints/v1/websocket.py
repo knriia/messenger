@@ -2,14 +2,16 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, status
 from dishka.integrations.fastapi import FromDishka, inject
+from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect, status
 
 from app.domain.interfaces.security import ISecurityService
 from app.services.connection_manager import ConnectionManager
 
 websocket_router = APIRouter(prefix="/v1/ws", tags=["WebSocket"])
-@websocket_router.websocket('')
+
+
+@websocket_router.websocket("")
 @inject
 async def websocket_endpoint(
     websocket: WebSocket,

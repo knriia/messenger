@@ -1,9 +1,9 @@
-"""Репозиторий для работы с сущностью пользователя."""
+"""Репозиторий сущности пользователя."""
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.domain.entities.user_entity import UserEntity
+from app.domain.entities.user_entity import UserEntity, UserStoreEntity, UserWithPasswordEntity
 from app.domain.interfaces.user_repo import IUserRepository
 from app.infrastructure.postgres.mappers.user_mapper import UserMapper
 from app.infrastructure.postgres.models.user import User
@@ -13,8 +13,8 @@ class UserRepository(IUserRepository):
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def create_user(self, username: str, hashed_password: str) -> UserEntity:
-        new_user = User(username=username, hashed_password=hashed_password)
+    async def create_user(self, user_data: UserStoreEntity) -> UserEntity:
+        new_user = User(**user_data.to_dict())
         self._session.add(new_user)
         await self._session.flush()
         return UserMapper.to_domain(new_user)
@@ -24,9 +24,24 @@ class UserRepository(IUserRepository):
         result = await self._session.execute(stmt)
         return [UserMapper.to_domain(u) for u in result.scalars().all()]
 
-
     async def get_by_username(self, username: str) -> UserEntity | None:
         stmt = select(User).where(User.username == username)
         result = await self._session.execute(stmt)
         db_user = result.scalar_one_or_none()
         return UserMapper.to_domain(db_user) if db_user else None
+
+    async def get_with_password_by_username(self, username: str) -> UserWithPasswordEntity | None:
+        stmt = select(User).where(User.username == username)
+        result = await self._session.execute(stmt)
+        db_user = result.scalar_one_or_none()
+
+        if not db_user:
+            return None
+
+        return UserWithPasswordEntity(
+            id=db_user.id,
+            username=db_user.username,
+            email=db_user.email,
+            created_at=db_user.created_at,
+            hashed_password=db_user.hashed_password,
+        )

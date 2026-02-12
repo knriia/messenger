@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.domain.entities.token import TokenEntity
+from app.domain.entities.token import TokenPayloadEntity
 
 
 class ISecurityService(ABC):
@@ -13,9 +13,9 @@ class ISecurityService(ABC):
         pass
 
     @abstractmethod
-    def create_access_token(self, payload: TokenEntity) -> str:
+    def create_access_token(self, payload: TokenPayloadEntity) -> str:
         pass
 
     @abstractmethod
-    def decode_token(self, token: str) -> TokenEntity | None:
+    def decode_token(self, token: str) -> TokenPayloadEntity | None:
         pass

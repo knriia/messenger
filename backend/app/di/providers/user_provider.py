@@ -3,10 +3,10 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import Settings
 from app.domain.interfaces.security import ISecurityService
 from app.domain.interfaces.user_repo import IUserRepository
 from app.infrastructure.postgres.repositories.user_repo import UserRepository
-from app.core.config import Settings
 from app.services.auth import AuthService
 from app.services.security import SecurityService
 
@@ -17,13 +17,15 @@ class UserProvider(Provider):
         return UserRepository(session=session)
 
     @provide(scope=Scope.REQUEST)
-    def get_auth_service(self, user_repo: IUserRepository, security: ISecurityService) -> AuthService:
-        return AuthService(user_repository=user_repo, security_service=security)
+    def get_auth_service(
+        self, user_repo: IUserRepository, security: ISecurityService, settings: Settings
+    ) -> AuthService:
+        return AuthService(user_repository=user_repo, security_service=security, token_type=settings.TOKEN_TYPE_BEARER)
 
     @provide(scope=Scope.APP)
     def get_security_service(self, settings: Settings) -> ISecurityService:
         return SecurityService(
             secret_key=settings.SECRET_KEY,
             algorithm=settings.ALGORITHM,
-            expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
         )

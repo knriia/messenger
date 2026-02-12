@@ -3,12 +3,12 @@ from typing import cast
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.domain.consts import ChatType
 from app.domain.entities.chat_entity import PrivateChatEntity
 from app.domain.interfaces.chat_repo import IChatRepository
+from app.domain.logic import generate_private_chat_hash
 from app.infrastructure.postgres.mappers.chat_mapper import ChatMapper
 from app.infrastructure.postgres.models.chat import Chat
-from app.domain.consts import ChatType
-from app.domain.logic import generate_private_chat_hash
 
 
 class ChatRepository(IChatRepository):
@@ -23,7 +23,7 @@ class ChatRepository(IChatRepository):
         if not db_chat:
             return None
 
-        return cast(PrivateChatEntity, ChatMapper.to_domain(db_chat))
+        return cast("PrivateChatEntity", ChatMapper.to_domain(db_chat))
 
     async def create_private_chat(self, creator_id: int, user_ids: list[int]) -> PrivateChatEntity:
         new_chat = Chat(
@@ -33,4 +33,4 @@ class ChatRepository(IChatRepository):
         )
         self._session.add(new_chat)
         await self._session.flush()
-        return cast(PrivateChatEntity, ChatMapper.to_domain(new_chat))
+        return cast("PrivateChatEntity", ChatMapper.to_domain(new_chat))

@@ -1,9 +1,14 @@
 """Менеджер сессий базы данных."""
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
-from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 
 class DatabaseSessionManager:
@@ -14,7 +19,7 @@ class DatabaseSessionManager:
             class_=AsyncSession,
             expire_on_commit=False,
             autocommit=False,
-            autoflush=False
+            autoflush=False,
         )
 
     async def close(self):

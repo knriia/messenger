@@ -1,6 +1,8 @@
 """Точка входа в воркер Kafka."""
 
 import asyncio
+from contextlib import suppress
+
 from app.di.container import get_container
 from app.domain.interfaces.processor import IMessageProcessor
 
@@ -15,7 +17,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    try:
+    with suppress(KeyboardInterrupt):
         asyncio.run(main())
-    except KeyboardInterrupt:
-        pass
