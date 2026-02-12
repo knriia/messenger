@@ -5,7 +5,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from dishka.integrations.fastapi import FromDishka, inject
 
-from app.services.security import SecurityService
+from app.domain.interfaces.security import ISecurityService
 from app.infrastructure.postgres.repositories.user_repo import UserRepository
 from app.infrastructure.postgres.models.user import User
 
@@ -15,7 +15,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 @inject
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    security_service: FromDishka[SecurityService],
+    security_service: FromDishka[ISecurityService],
     user_repo: FromDishka[UserRepository]
 ) -> User:
     payload = security_service.decode_token(token)
