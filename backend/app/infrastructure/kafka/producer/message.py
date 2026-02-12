@@ -1,8 +1,9 @@
 """Сервис отправки сообщений в Kafka."""
+
+import json
 from typing import Any
 
 from aiokafka import AIOKafkaProducer
-import json
 
 from app.domain.interfaces.broker import IMessageBroker
 

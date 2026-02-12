@@ -1,6 +1,10 @@
-from app.infrastructure.postgres.models.chat import Chat
 from app.domain.consts import ChatType
-from app.domain.entities.chat_entity import PrivateChatEntity, GroupChatEntity, BaseChatEntity
+from app.domain.entities.chat_entity import (
+    BaseChatEntity,
+    GroupChatEntity,
+    PrivateChatEntity,
+)
+from app.infrastructure.postgres.models.chat import Chat
 
 
 class ChatMapper:
@@ -12,7 +16,7 @@ class ChatMapper:
                 creator_id=db_chat.creator_id,
                 created_at=db_chat.created_at,
                 chat_type=ChatType(db_chat.chat_type),
-                private_hash=db_chat.private_hash
+                private_hash=db_chat.private_hash,
             )
 
         return GroupChatEntity(
@@ -20,5 +24,5 @@ class ChatMapper:
             creator_id=db_chat.creator_id,
             created_at=db_chat.created_at,
             chat_type=ChatType(db_chat.chat_type),
-            chat_name=db_chat.name
+            chat_name=db_chat.name,
         )

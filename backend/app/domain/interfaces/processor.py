@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from dishka import AsyncContainer
-
 
 class IMessageProcessor(ABC):
     @abstractmethod

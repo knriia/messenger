@@ -1,20 +1,17 @@
 import asyncio
 import logging
+
 from redis.asyncio import Redis
-from app.services.connection_manager import ConnectionManager
+
 from app.core.config import Settings
 from app.schemas.notification import RedisChatNotification
+from app.services.connection_manager import ConnectionManager
 
 logger = logging.getLogger(__name__)
 
 
 class RedisNotificationListener:
-    def __init__(
-        self,
-        redis: Redis,
-        manager: ConnectionManager,
-        settings: Settings
-    ):
+    def __init__(self, redis: Redis, manager: ConnectionManager, settings: Settings):
         self.redis = redis
         self.manager = manager
         self.settings = settings
@@ -26,11 +23,11 @@ class RedisNotificationListener:
         logger.info("✅ Started listening for Redis notifications")
         try:
             async for message in pubsub.listen():
-                if message['type'] != 'message':
+                if message["type"] != "message":
                     continue
 
                 try:
-                    notification = RedisChatNotification.model_validate_json(message['data'])
+                    notification = RedisChatNotification.model_validate_json(message["data"])
 
                     tasks = [
                         self.manager.send_to_user(user_id, notification.payload)

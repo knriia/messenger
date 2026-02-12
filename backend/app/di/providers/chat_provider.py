@@ -5,9 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.interfaces.chat_member_repo import IChatMemberRepository
 from app.domain.interfaces.chat_repo import IChatRepository
-from app.infrastructure.postgres.repositories.chat_repo import ChatRepository
-from app.infrastructure.postgres.repositories.chat_member_repo import ChatMemberRepository
 from app.domain.interfaces.uow import IUnitOfWork
+from app.infrastructure.postgres.repositories.chat_member_repo import (
+    ChatMemberRepository,
+)
+from app.infrastructure.postgres.repositories.chat_repo import ChatRepository
 from app.services.chat_management import ChatManagementService
 
 

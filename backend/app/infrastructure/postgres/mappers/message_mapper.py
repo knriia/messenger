@@ -1,5 +1,6 @@
-from app.infrastructure.postgres.models.message import Message
 from app.domain.entities.message_entity import MessageEntity
+from app.infrastructure.postgres.models.message import Message
+
 
 class MessageMapper:
     @staticmethod
@@ -9,5 +10,5 @@ class MessageMapper:
             chat_id=db_msg.chat_id,
             sender_id=db_msg.sender_id,
             content=db_msg.content,
-            created_at=db_msg.created_at
+            created_at=db_msg.created_at,
         )

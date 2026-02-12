@@ -1,5 +1,6 @@
-from app.infrastructure.postgres.models.user import User
 from app.domain.entities.user_entity import UserEntity
+from app.infrastructure.postgres.models.user import User
+
 
 class UserMapper:
     @staticmethod
@@ -8,5 +9,5 @@ class UserMapper:
             id=db_user.id,
             username=db_user.username,
             email=db_user.email,
-            created_at=db_user.created_at
+            created_at=db_user.created_at,
         )

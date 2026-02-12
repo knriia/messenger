@@ -1,16 +1,17 @@
 from dishka import Provider, Scope, provide
-from sqlalchemy.ext.asyncio import AsyncSession
 from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import Settings
 from app.domain.interfaces.broker import IMessageBroker
 from app.domain.interfaces.chat_member_repo import IChatMemberRepository
 from app.domain.interfaces.message_repo import IMessageRepository
 from app.domain.interfaces.uow import IUnitOfWork
 from app.infrastructure.postgres.repositories.message_repo import MessageRepository
+from app.services.connection_manager import ConnectionManager
 from app.services.message import MessageService
 from app.services.message_handler import MessageHandler
-from app.services.connection_manager import ConnectionManager
-from app.core.config import Settings
+
 
 class MessageProvider(Provider):
     @provide(scope=Scope.REQUEST)
@@ -19,10 +20,7 @@ class MessageProvider(Provider):
 
     @provide(scope=Scope.REQUEST)
     def get_message_handler(
-        self,
-        member_repo: IChatMemberRepository,
-        redis: Redis,
-        settings: Settings
+        self, member_repo: IChatMemberRepository, redis: Redis, settings: Settings
     ) -> MessageHandler:
         return MessageHandler(member_repo=member_repo, redis=redis, settings=settings)
 

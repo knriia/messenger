@@ -1,15 +1,15 @@
 """Модель сущности пользователя."""
 
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
-from datetime import datetime, timezone
-from sqlalchemy import String, Boolean, DateTime
+
+from sqlalchemy import Boolean, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.infrastructure.postgres.models.base import Base
 
-
 if TYPE_CHECKING:
-    from .chat import ChatMember, Chat
+    from .chat import Chat, ChatMember
     from .message import Message
 
 
@@ -22,55 +22,48 @@ class User(Base):
         unique=True,
         nullable=False,
         index=True,
-        comment='Уникальное имя пользователя'
+        comment="Уникальное имя пользователя",
     )
-    email: Mapped[str | None] = mapped_column(String(255), unique=True, index=True, comment='Email пользователя')
-    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False, comment='Хэшированный пароль')
-    first_name: Mapped[str] = mapped_column(String(100), nullable=True, comment='Имя пользователя')
-    last_name: Mapped[str] = mapped_column(String(100), nullable=True, comment='Фамилия пользователя')
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment='Активен ли аккаунт')
-    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, comment='Подтвержден ли аккаунт')
-    is_online: Mapped[bool] = mapped_column(Boolean, default=False, comment='Оналайн ли пользователь сейчас')
+    email: Mapped[str | None] = mapped_column(String(255), unique=True, index=True, comment="Email пользователя")
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False, comment="Хэшированный пароль")
+    first_name: Mapped[str] = mapped_column(String(100), nullable=True, comment="Имя пользователя")
+    last_name: Mapped[str] = mapped_column(String(100), nullable=True, comment="Фамилия пользователя")
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="Активен ли аккаунт")
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, comment="Подтвержден ли аккаунт")
+    is_online: Mapped[bool] = mapped_column(Boolean, default=False, comment="Оналайн ли пользователь сейчас")
     last_seen: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
         nullable=False,
-        comment='Последний посещение'
+        comment="Последний посещение",
     )
     notifications_enabled: Mapped[bool] = mapped_column(
-        Boolean,
-        nullable=False,
-        default=True,
-        comment="Включены ли уведомления"
+        Boolean, nullable=False, default=True, comment="Включены ли уведомления"
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
         nullable=False,
-        comment="Дата создания аккаунта"
+        comment="Дата создания аккаунта",
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
         nullable=False,
-        comment="Дата последнего обновления профиля"
+        comment="Дата последнего обновления профиля",
     )
     sent_messages: Mapped[list["Message"]] = relationship(
         back_populates="sender",
         foreign_keys="Message.sender_id",
         cascade="all, delete-orphan",
-        lazy="selectin"
+        lazy="selectin",
     )
     chat_memberships: Mapped[list["ChatMember"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan",
-        lazy="selectin"
+        back_populates="user", cascade="all, delete-orphan", lazy="selectin"
     )
     created_chats: Mapped[list["Chat"]] = relationship(
-        back_populates="creator",
-        cascade="all, delete-orphan",
-        lazy="selectin"
+        back_populates="creator", cascade="all, delete-orphan", lazy="selectin"
     )
 
     @property
@@ -90,7 +83,7 @@ class User(Base):
 
     def update_last_seen(self):
         """Обновить время последней активности"""
-        self.last_seen = datetime.now(timezone.utc)
+        self.last_seen = datetime.now(UTC)
 
     @property
     def chats(self) -> list["Chat"]:
@@ -99,4 +92,3 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, username='{self.username}', email='{self.email}')>"
-

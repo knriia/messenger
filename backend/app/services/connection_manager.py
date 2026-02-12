@@ -31,7 +31,7 @@ class ConnectionManager:
             return
 
         sockets = list(self.active_connections[user_id])
-        message_data = message.model_dump(mode='json')
+        message_data = message.model_dump(mode="json")
         tasks = [self._send_safe(user_id, ws, message_data) for ws in sockets]
         await asyncio.gather(*tasks, return_exceptions=True)
 
