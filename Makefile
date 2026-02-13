@@ -1,4 +1,4 @@
-DC = docker-compose
+DC = docker compose
 EXEC = docker exec -it
 APP_CONTAINER = backend
 
