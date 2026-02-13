@@ -28,8 +28,8 @@ class UnitOfWork(IUnitOfWork):
     ) -> None:
         if exc_type:
             await self.rollback()
-        else:
-            await self.commit()
+
+        await self._session.close()
 
     async def commit(self):
         await self._session.commit()
