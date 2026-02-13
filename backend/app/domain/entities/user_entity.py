@@ -6,7 +6,7 @@ from datetime import datetime
 class UserEntity:
     id: int
     username: str
-    email: str
+    email: str | None
     created_at: datetime
 
 

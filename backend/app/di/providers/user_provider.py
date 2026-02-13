@@ -5,10 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import Settings
 from app.domain.interfaces.security import ISecurityService
+from app.domain.interfaces.uow import IUnitOfWork
 from app.domain.interfaces.user_repo import IUserRepository
 from app.infrastructure.postgres.repositories.user_repo import UserRepository
 from app.services.auth import AuthService
 from app.services.security import SecurityService
+from app.services.user import UserService
 
 
 class UserProvider(Provider):
@@ -29,3 +31,7 @@ class UserProvider(Provider):
             algorithm=settings.ALGORITHM,
             expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
         )
+
+    @provide(scope=Scope.REQUEST)
+    def get_user_service(self, uow: IUnitOfWork) -> UserService:
+        return UserService(uow=uow)

@@ -3,7 +3,7 @@ from dataclasses import asdict, dataclass
 
 @dataclass(frozen=True)
 class TokenPayloadEntity:
-    sub: str  # username
+    sub: str
     user_id: int
     exp: int | None = None  # время истечения
 
