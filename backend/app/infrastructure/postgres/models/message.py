@@ -1,7 +1,7 @@
 """Модель сущности сообщения."""
 
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -70,7 +70,7 @@ class Message(Base):
 
     chat: Mapped["Chat"] = relationship(back_populates="messages")
 
-    reply_to: Mapped["Message"] | None = relationship(remote_side=[id], backref="replies")
+    reply_to: Mapped[Optional["Message"]] = relationship(remote_side=[id], backref="replies")
 
     def __repr__(self) -> str:
         preview = self.content[:30] + "..." if len(self.content) > 30 else self.content
