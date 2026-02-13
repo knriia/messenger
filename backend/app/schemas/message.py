@@ -25,7 +25,7 @@ class MessageCreate(BaseModel):
 
 class MessageRead(MessageCreate):
     id: int
-    sender_id: int  # При чтении ID отправителя нам нужен
+    sender_id: int
     chat_id: int
     content: str
     message_type: str
